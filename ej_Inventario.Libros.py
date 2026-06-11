@@ -86,17 +86,11 @@ def registra_libro():
     datos correctos.
     """
 
-    codigo_valido = False 
-
-    #While que valida el codigo, mientras el codigo exista, se seguira solicitando uno valido
-    while codigo_valido == False:
-        codigo_nuevo = input("Ingrese el codigo del libro a registrar: ")
-        for libro in inventario:
+    codigo_nuevo = input("Ingrese el codigo del libro a registrar: ")
+    for libro in inventario:
             if libro["codigo"] == codigo_nuevo:
                 print("El codigo ya existe, intente nuevamente.")
                 break
-        else:
-            codigo_valido = True
     
     titulo = input("Ingrese el titulo del libro: ")
     autor = input("Ingrese el autor del libro: ")
@@ -104,7 +98,7 @@ def registra_libro():
     error_cant = True
     error_precio = True
 
-    #Whiles para que los parametros precio y cantidad sean ingresadon en fomrato int
+    #Whiles para que los parametros precio y cantidad sean ingresadon en formato int
     while error_cant == True:
         try:
             cantidad = int(input("Ingrese la cantidad disponible del libro: "))
@@ -114,7 +108,7 @@ def registra_libro():
 
     while error_precio == True:
         try:
-            precio = int(input("Ingrese el precio del libro: "))
+            precio = float(input("Ingrese el precio del libro: "))
             error_precio = False
         except ValueError:
             print("Error, Favor de ingresar un dato valido.")
@@ -129,5 +123,109 @@ def registra_libro():
         }
 
     inventario.append(libro_nuevo)
-    return print("Libro ingresado con exito")
+    print("Libro ingresado con exito")
+    return 
 
+def buscar_libro():
+
+    codigo = input("Ingrese el codigo del libro a registrar: ")
+    for libro in inventario:
+        print("-LIBRO ENCONTRADO-")
+        print(f"Codigo: {libro[codigo]}")
+        print(f"Titulo: {libro["titulo"]}")
+        print(f"Autor: {libro["autor"]}")
+        print(f"Cantidad disponible: {libro["cantidad"]}")
+        print(f"Precio: {libro["precio"]}")
+        return
+    return "Libro no encontrado"
+def actualizar_stock():
+    codigo = input("Ingrese el codigo del libro: ")
+    for libro in inventario:
+        if codigo in libro["codigo"]:
+            try:
+                cant_actu = int(input("Ingrese la nueva cantidad en stock: "))
+                inventario["cantidad"] = cant_actu
+                print("Se ha actualizado el stock sin problemas.")
+            except ValueError:
+                print("Por favor, ingrese un número entero.")
+            return
+    
+    print("Libro no encontrado.")
+
+def mostrar_inventrio():
+    if len(inventario) > 0:
+        for libro in inventario:
+            print(f"Codigo: {libro["codigo"]}")
+            print(f"Titulo: {libro["titulo"]}")
+            print(f"Autor: {libro["autor"]}")
+            print(f"Cantidad dicsponible: {libro["cantidad"]}")
+            print(f"Precio: {libro["precio"]}")
+            return
+    
+    else:
+        print("El inventario se encuentra vacio.")
+        return 
+
+def mostrar_mas_caro():
+    if len(inventario) == 0:
+        print("El inventario se encuentra vacio.")
+        return 
+    
+    costoso = inventario[0]
+
+    for libro in inventario:
+        if libro["precio"] > costoso["precio"]:
+           costoso = libro 
+    
+    print("-LIBRO MÁS CARO-")
+    print(f"Codigo: {costoso["codigo"]}")
+    print(f"Titulo: {costoso["titulo"]}")
+    print(f"Autor: {costoso["autor"]}")
+    print(f"Cantidad dicsponible: {costoso["cantidad"]}")
+    print(f"Precio: {costoso["precio"]}")
+    return
+
+def eliminar_libro():
+    codigo = input("Ingrese el codigo de llibro a eliminar: ")
+    for libro in inventario: 
+        if libro["codigo"] == codigo:
+            inventario.remove(libro)
+            print("Libro eliminado con exito.")
+        return
+    
+    print("Libro no encontrado.")
+
+
+while True:
+    print("----LIBRERIA----")
+    print("1. Registrar libro")
+    print("2. Buscar libro")
+    print("3. Actualizar stock")
+    print("4. Mostrar Inventario")
+    print("5. Mostrar libro más caro")
+    print("6. Eliminar libro")
+    print("7. salir")
+
+    try:
+        opcion = input("Ingrese una opcion valida: ")
+
+        match opcion:
+            case "1":
+                registra_libro()
+            case "2":
+                buscar_libro()
+            case "3":
+                actualizar_stock()
+            case"4":
+                mostrar_inventrio()
+            case "5":
+                mostrar_mas_caro()
+            case "6":
+                eliminar_libro()
+            case "7":
+                break
+            case _:
+                print("Opcion Invalida")
+    except ValueError:
+        print("Ingrese una opcion valida")
+        
